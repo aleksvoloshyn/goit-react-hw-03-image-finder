@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import { Searchbar } from './Components/Searchbar/Searchbar';
+import { Modal } from './Components/Modal/Modal';
+import { ImageGalleryItem } from './Components/ImageGalleryItem/ImageGalleryItem';
+import { ImageGallery } from './Components/ImageGallery/ImageGallery';
+import imageTest from './Data/testData.json';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    showModal: false,
+  };
+
+  toggleModal = () => {
+    // this.setState(({ showModal }) => ({ showModal: !showModal }));
+    this.setState({ showModal: !this.state.showModal });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <Searchbar />
+        <ImageGallery toggleModal={this.toggleModal} />
+        {this.state.showModal && (
+          <Modal onClose={this.toggleModal}>
+            <ImageGalleryItem image={imageTest}></ImageGalleryItem>
+          </Modal>
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
