@@ -6,7 +6,7 @@ import { Modal } from './Components/Modal/Modal';
 // import { ImageGalleryItem } from './Components/ImageGalleryItem/ImageGalleryItem';
 import { ImageGallery } from './Components/ImageGallery/ImageGallery';
 import { Button } from './Components/Button/Button';
-import imageTest from './Data/testData.json';
+// import imageTest from './Data/testData.json';
 import { GetImagesApi } from './Components/Api/ImageApi';
 // import axios from 'axios';
 
@@ -16,17 +16,11 @@ class App extends Component {
   state = {
     showModal: false,
     pictures: [],
-    searchRequest: '',
+    searchRequest: 'lion',
     loading: false,
     error: '',
     page: 1,
     src: '',
-  };
-
-  toggleModal = e => {
-    this.setState({ showModal: !this.state.showModal });
-
-    this.setState({ src: e.target.src });
   };
 
   getData = (request, page) => {
@@ -74,6 +68,18 @@ class App extends Component {
     return;
   };
 
+  toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
+  };
+
+  setCurrentPictureSrc = e => {
+    this.setState({ showModal: !this.state.showModal });
+    if (e !== undefined) {
+      this.setState({ src: e.target.src });
+    }
+    // console.log(e.target);
+  };
+
   render() {
     return (
       <div className="App">
@@ -81,14 +87,14 @@ class App extends Component {
         <Searchbar onSubmit={this.setSearchRequest} />
 
         <ImageGallery
-          toggleModal={this.toggleModal}
+          toggleModal={this.setCurrentPictureSrc}
           images={this.state.pictures}
         />
         {/* {this.state.loading && <p>Loading</p>} */}
         {this.state.showModal && (
           <Modal onClose={this.toggleModal}>
             <div>
-              <img width="800px" src={this.state.src} alt="" />
+              <img width="1000px" src={this.state.src} alt="" />
             </div>
           </Modal>
         )}
