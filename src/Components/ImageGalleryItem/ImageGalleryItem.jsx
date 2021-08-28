@@ -8,7 +8,7 @@ const ImageGalleryItem = ({ toggle, images }) => {
         return (
           <li onClick={toggle} className="ImageGalleryItem" key={item.id}>
             <img
-              src={item.webformatURL}
+              src={item.largeImageURL}
               alt=""
               className={styles.ImageGalleryItem__image}
             />

@@ -19,17 +19,23 @@ class App extends Component {
     searchRequest: '',
     loading: false,
     error: '',
+    page: 1,
+    src: '',
   };
 
-  toggleModal = () => {
+  toggleModal = e => {
     this.setState({ showModal: !this.state.showModal });
+
+    this.setState({ src: e.target.src });
   };
 
   getData = (request, page) => {
     GetImagesApi(request, page)
       .then(response => {
-        if (response.status === 200) {
-          this.setState({ pictures: response.data.hits });
+        if (response.status === 200 && this.state.searchRequest.trim().length) {
+          this.setState({
+            pictures: [...this.state.pictures, ...response.data.hits],
+          });
         }
         if (response.status === 404) {
           throw new Error(response.message || 'pictures not exist');
@@ -45,20 +51,27 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    this.getData(this.state.searchRequest, 1);
-    console.log('componentDidMount');
+    this.getData(this.state.searchRequest, this.state.page);
   }
+
   componentDidUpdate() {
-    console.log(this.state.searchRequest);
-    console.log('componentDidUpdate');
-    console.log(this.state.loading);
-    console.log(this.state.searchRequest.trim().length);
-    // this.state.searchRequest.trim().length !== 0;
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
   setSearchRequest = request => {
+    this.setState({ pictures: [] });
     this.setState({ searchRequest: request });
-    this.getData(request, 1);
+    this.getData(request, this.state.page);
+  };
+  // page = this.state.page;
+  pageIncrement = () => {
+    this.setState({ page: this.state.page + 1 });
+
+    this.getData(this.state.searchRequest, this.state.page + 1);
+    return;
   };
 
   render() {
@@ -75,14 +88,12 @@ class App extends Component {
         {this.state.showModal && (
           <Modal onClose={this.toggleModal}>
             <div>
-              {imageTest.map(pic => {
-                return <img key={pic.id} src={pic.avatar} alt="" />;
-              })}
+              <img width="800px" src={this.state.src} alt="" />
             </div>
           </Modal>
         )}
         <div className={'container'}>
-          <Button />
+          <Button onClick={this.pageIncrement} />
         </div>
       </div>
     );
