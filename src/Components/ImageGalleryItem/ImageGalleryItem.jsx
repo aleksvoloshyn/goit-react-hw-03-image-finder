@@ -1,4 +1,4 @@
-// import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './ImageGalleryItem.module.css';
 
 const ImageGalleryItem = ({ toggle, images }) => {
@@ -18,6 +18,11 @@ const ImageGalleryItem = ({ toggle, images }) => {
       })}
     </>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(PropTypes.shape).isRequired,
 };
 
 export { ImageGalleryItem };
