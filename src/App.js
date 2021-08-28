@@ -34,8 +34,10 @@ class App extends Component {
     this.getData(this.state.searchRequest, this.state.page);
   }
 
-  componentDidUpdate() {
-    // scrollPageDown();
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchRequest !== this.state.searchRequest) {
+      this.setState({ pictures: [] });
+    }
   }
 
   getData = (request, page) => {
@@ -65,7 +67,6 @@ class App extends Component {
 
   setSearchRequest = request => {
     this.setState({ loading: true });
-    this.setState({ pictures: [] });
     this.setState({ searchRequest: request });
     this.getData(request, this.state.page);
   };
@@ -96,15 +97,13 @@ class App extends Component {
         <ToastContainer autoClose={2000} newestOnTop={true} />
 
         <Searchbar onSubmit={this.setSearchRequest} />
-        {/* {this.state.loading && <Load />} */}
 
-        {/* {this.state.pictures.length === 0 && (
-          <p>По Вашему запросу изображения не найдены</p>
-        )} */}
-        <ImageGallery
-          toggleModal={this.setCurrentPictureSrc}
-          images={this.state.pictures}
-        />
+        {this.state.pictures.length !== 0 && (
+          <ImageGallery
+            toggleModal={this.setCurrentPictureSrc}
+            images={this.state.pictures}
+          />
+        )}
 
         {this.state.showModal && (
           <Modal onClose={this.toggleModal}>

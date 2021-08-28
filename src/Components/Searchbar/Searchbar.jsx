@@ -17,6 +17,7 @@ class Searchbar extends Component {
 
     if (!this.state.searchRequest) {
       toast.error('Ввдите данные в строку поиска');
+      // this.props.clearPage();
       return;
     }
     this.setState({ searchRequest: '' });
