@@ -19,7 +19,6 @@ class Searchbar extends Component {
       return;
     }
     this.setState({ searchRequest: '' });
-    toast.success('Searching, my lord ;)');
 
     this.props.onSubmit(this.state.searchRequest);
   };

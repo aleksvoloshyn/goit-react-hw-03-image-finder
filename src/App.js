@@ -4,11 +4,19 @@ import { Modal } from './Components/Modal/Modal';
 import { ImageGallery } from './Components/ImageGallery/ImageGallery';
 import { Button } from './Components/Button/Button';
 import { GetImagesApi } from './Components/Api/ImageApi';
-import Loader from 'react-loader-spinner';
+import { Load } from './Loader/Loader';
 import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+
+function scrollPageDown() {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth',
+  });
+}
 
 class App extends Component {
   state = {
@@ -23,15 +31,11 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.setState({ loading: true });
     this.getData(this.state.searchRequest, this.state.page);
   }
 
   componentDidUpdate() {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    });
+    // scrollPageDown();
   }
 
   getData = (request, page) => {
@@ -41,6 +45,11 @@ class App extends Component {
           this.setState({
             pictures: [...this.state.pictures, ...response.data.hits],
           });
+
+          if (this.state.pictures.length === 0) {
+            toast.error('По вашему запросу - НИЧЕГО НЕ НАЙДЕНО!');
+          }
+          scrollPageDown();
         }
         if (response.status === 404) {
           throw new Error(response.message || 'pictures not exist');
@@ -64,6 +73,8 @@ class App extends Component {
   pageIncrement = () => {
     this.setState({ page: this.state.page + 1 });
     this.getData(this.state.searchRequest, this.state.page + 1);
+    this.setState({ loading: true });
+
     return;
   };
 
@@ -82,23 +93,19 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ToastContainer />
+        <ToastContainer autoClose={2000} newestOnTop={true} />
 
         <Searchbar onSubmit={this.setSearchRequest} />
+        {/* {this.state.loading && <Load />} */}
 
+        {/* {this.state.pictures.length === 0 && (
+          <p>По Вашему запросу изображения не найдены</p>
+        )} */}
         <ImageGallery
           toggleModal={this.setCurrentPictureSrc}
           images={this.state.pictures}
         />
-        {this.state.loading && (
-          <Loader
-            type="MutatingDots"
-            color="#00BFFF"
-            height={100}
-            width={100}
-            timeout={3000} //3 secs
-          />
-        )}
+
         {this.state.showModal && (
           <Modal onClose={this.toggleModal}>
             <div>
@@ -106,7 +113,7 @@ class App extends Component {
             </div>
           </Modal>
         )}
-
+        {this.state.loading && <Load />}
         {this.state.pictures.length > 0 && (
           <div className={'container'}>
             <Button onClick={this.pageIncrement} />
