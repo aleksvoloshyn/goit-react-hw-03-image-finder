@@ -8,9 +8,10 @@ const ImageGalleryItem = ({ toggle, images }) => {
         return (
           <li onClick={toggle} className="ImageGalleryItem" key={item.id}>
             <img
-              src={item.largeImageURL}
-              alt=""
+              src={item.webformatURL}
+              alt={item.tags}
               className={styles.ImageGalleryItem__image}
+              data-largeimage={item.largeImageURL}
             />
           </li>
         );
