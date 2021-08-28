@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
 import styles from './ImageGalleryItem.module.css';
 
-function ImageGalleryItem({ toggle, image, id }) {
+const ImageGalleryItem = ({ toggle, images }) => {
   return (
     <>
-      {image.map(item => {
+      {images.map(item => {
         return (
           <li onClick={toggle} className="ImageGalleryItem" key={item.id}>
             <img
-              src={item.avatar}
+              src={item.webformatURL}
               alt=""
               className={styles.ImageGalleryItem__image}
             />
@@ -17,6 +17,6 @@ function ImageGalleryItem({ toggle, image, id }) {
       })}
     </>
   );
-}
+};
 
 export { ImageGalleryItem };
